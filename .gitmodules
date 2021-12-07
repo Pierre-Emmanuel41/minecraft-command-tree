@@ -3,3 +3,8 @@
 	url = https://github.com/Pierre-Emmanuel41/minecraft-dictionary.git
 	update = rebase
 	branch = 3.0_MC_1.13.2-SNAPSHOT
+[submodule "command-tree"]
+	path = command-tree
+	url = https://github.com/Pierre-Emmanuel41/command-tree.git
+	update = rebase
+	branch = 1.0-SNAPSHOT
