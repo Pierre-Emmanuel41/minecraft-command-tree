@@ -29,7 +29,7 @@ public interface ICodeSender {
 	 */
 	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
 			Object... args) {
-		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
+		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, displayOption, isItalic, isBold, color, args));
 	}
 
@@ -45,7 +45,7 @@ public interface ICodeSender {
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
 	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
-		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
+		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, displayOption, color, args));
 	}
 
@@ -60,7 +60,7 @@ public interface ICodeSender {
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
 	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, Object... args) {
-		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
+		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, displayOption, args));
 	}
 
@@ -75,7 +75,7 @@ public interface ICodeSender {
 	 * @param args   Some arguments (optional) used for dynamic messages.
 	 */
 	public default void sendSynchro(CommandSender sender, IMinecraftCode code, EColor color, Object... args) {
-		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
+		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, color, args));
 	}
 
@@ -89,7 +89,7 @@ public interface ICodeSender {
 	 * @param args   Some arguments (optional) used for dynamic messages.
 	 */
 	public default void sendSynchro(CommandSender sender, IMinecraftCode code, Object... args) {
-		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
+		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, args));
 	}
 
