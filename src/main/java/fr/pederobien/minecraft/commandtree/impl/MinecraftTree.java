@@ -227,7 +227,7 @@ public class MinecraftTree {
 		 * 
 		 * @return the constructed node.
 		 */
-		public INode<T> addAndGet() {
+		public IMinecraftNode<T> addAndGet() {
 			parent.add(node);
 			return node;
 		}
