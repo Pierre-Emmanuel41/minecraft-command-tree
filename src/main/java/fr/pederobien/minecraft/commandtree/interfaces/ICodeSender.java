@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import fr.pederobien.minecraft.dictionary.impl.MinecraftDictionaryContext;
 import fr.pederobien.minecraft.dictionary.impl.MinecraftMessageEvent;
-import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftMessageCode;
+import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftCode;
 import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftMessageEvent;
 import fr.pederobien.minecraft.managers.EColor;
 import fr.pederobien.minecraft.managers.MessageManager.DisplayOption;
@@ -27,7 +27,7 @@ public interface ICodeSender {
 	 * @param color         The message color.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftMessageCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
+	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
 			Object... args) {
 		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, displayOption, isItalic, isBold, color, args));
@@ -44,7 +44,7 @@ public interface ICodeSender {
 	 * @param color         The message color.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftMessageCode code, DisplayOption displayOption, EColor color, Object... args) {
+	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
 		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, displayOption, color, args));
 	}
@@ -59,7 +59,7 @@ public interface ICodeSender {
 	 * @param displayOption The place where the message should be displayed on player screen.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftMessageCode code, DisplayOption displayOption, Object... args) {
+	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, Object... args) {
 		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, displayOption, args));
 	}
@@ -74,7 +74,7 @@ public interface ICodeSender {
 	 * @param color  The message color.
 	 * @param args   Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftMessageCode code, EColor color, Object... args) {
+	public default void sendSynchro(CommandSender sender, IMinecraftCode code, EColor color, Object... args) {
 		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, color, args));
 	}
@@ -88,7 +88,7 @@ public interface ICodeSender {
 	 * @param code   Used as key to get the right message in the right dictionary.
 	 * @param args   Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftMessageCode code, Object... args) {
+	public default void sendSynchro(CommandSender sender, IMinecraftCode code, Object... args) {
 		if (sender instanceof Player && WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event((Player) sender, code, args));
 	}
@@ -105,7 +105,7 @@ public interface ICodeSender {
 	 * @param color         The message color.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(IMinecraftMessageCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
+	public default void sendSynchro(IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
 		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event(code, displayOption, isItalic, isBold, color, args));
 	}
@@ -120,7 +120,7 @@ public interface ICodeSender {
 	 * @param color         The message color.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(IMinecraftMessageCode code, DisplayOption displayOption, EColor color, Object... args) {
+	public default void sendSynchro(IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
 		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event(code, displayOption, color, args));
 	}
@@ -134,7 +134,7 @@ public interface ICodeSender {
 	 * @param displayOption The place where the message should be displayed on player screen.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(IMinecraftMessageCode code, DisplayOption displayOption, Object... args) {
+	public default void sendSynchro(IMinecraftCode code, DisplayOption displayOption, Object... args) {
 		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event(code, displayOption, args));
 	}
@@ -148,7 +148,7 @@ public interface ICodeSender {
 	 * @param color The message color.
 	 * @param args  Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(IMinecraftMessageCode code, EColor color, Object... args) {
+	public default void sendSynchro(IMinecraftCode code, EColor color, Object... args) {
 		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event(code, color, args));
 	}
@@ -161,7 +161,7 @@ public interface ICodeSender {
 	 * @param code Used as key to get the right message in the right dictionary.
 	 * @param args Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendSynchro(IMinecraftMessageCode code, Object... args) {
+	public default void sendSynchro(IMinecraftCode code, Object... args) {
 		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
 			send(event(code, args));
 	}
@@ -178,7 +178,7 @@ public interface ICodeSender {
 	 * @param color         The message color.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftMessageCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
+	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
 			Object... args) {
 		if (sender instanceof Player)
 			send(event((Player) sender, code, displayOption, isItalic, isBold, color, args));
@@ -194,7 +194,7 @@ public interface ICodeSender {
 	 * @param color         The message color.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftMessageCode code, DisplayOption displayOption, EColor color, Object... args) {
+	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
 		if (sender instanceof Player)
 			send(event((Player) sender, code, displayOption, color, args));
 	}
@@ -208,7 +208,7 @@ public interface ICodeSender {
 	 * @param displayOption The place where the message should be displayed on player screen.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftMessageCode code, DisplayOption displayOption, Object... args) {
+	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, Object... args) {
 		if (sender instanceof Player)
 			send(event((Player) sender, code, displayOption, args));
 	}
@@ -222,7 +222,7 @@ public interface ICodeSender {
 	 * @param color  The message color.
 	 * @param args   Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftMessageCode code, EColor color, Object... args) {
+	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, EColor color, Object... args) {
 		if (sender instanceof Player)
 			send(event((Player) sender, code, color, args));
 	}
@@ -235,7 +235,7 @@ public interface ICodeSender {
 	 * @param code   The code used to get the translation of the message in the player's language.
 	 * @param args   Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftMessageCode code, Object... args) {
+	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, Object... args) {
 		if (sender instanceof Player)
 			send(event((Player) sender, code, args));
 	}
@@ -252,7 +252,7 @@ public interface ICodeSender {
 	 * @param color         The message color.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(IMinecraftMessageCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
+	public default void sendNotSynchro(IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
 		send(event(code, displayOption, isItalic, isBold, color, args));
 	}
 
@@ -266,7 +266,7 @@ public interface ICodeSender {
 	 * @param color         The message color.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(IMinecraftMessageCode code, DisplayOption displayOption, EColor color, Object... args) {
+	public default void sendNotSynchro(IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
 		send(event(code, displayOption, color, args));
 	}
 
@@ -279,7 +279,7 @@ public interface ICodeSender {
 	 * @param displayOption The place where the message should be displayed on player screen.
 	 * @param args          Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(IMinecraftMessageCode code, DisplayOption displayOption, Object... args) {
+	public default void sendNotSynchro(IMinecraftCode code, DisplayOption displayOption, Object... args) {
 		send(event(code, displayOption, args));
 	}
 
@@ -292,7 +292,7 @@ public interface ICodeSender {
 	 * @param color The message color.
 	 * @param args  Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(IMinecraftMessageCode code, EColor color, Object... args) {
+	public default void sendNotSynchro(IMinecraftCode code, EColor color, Object... args) {
 		send(event(code, color, args));
 	}
 
@@ -304,7 +304,7 @@ public interface ICodeSender {
 	 * @param code The code used to get the translation of the message in the player's language.
 	 * @param args Some arguments (optional) used for dynamic messages.
 	 */
-	public default void sendNotSynchro(IMinecraftMessageCode code, Object... args) {
+	public default void sendNotSynchro(IMinecraftCode code, Object... args) {
 		send(event(code, args));
 	}
 
@@ -317,7 +317,7 @@ public interface ICodeSender {
 	 * 
 	 * @return The message associated to the specified code. If the sender is not a player, then it returns an empty string.
 	 */
-	public default String getMessage(CommandSender sender, IMinecraftMessageCode code, Object... args) {
+	public default String getMessage(CommandSender sender, IMinecraftCode code, Object... args) {
 		return sender instanceof Player ? MinecraftDictionaryContext.getInstance().getMessage(event((Player) sender, code, args)) : "";
 	}
 
@@ -334,7 +334,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftMessageCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
+	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
 			Object... args) {
 		return new MinecraftMessageEvent(player, code, displayOption, isItalic, isBold, color, args);
 	}
@@ -350,7 +350,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftMessageCode code, DisplayOption displayOption, EColor color, Object... args) {
+	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
 		return new MinecraftMessageEvent(player, code, displayOption, color, args);
 	}
 
@@ -364,7 +364,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftMessageCode code, DisplayOption displayOption, Object... args) {
+	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, DisplayOption displayOption, Object... args) {
 		return new MinecraftMessageEvent(player, code, displayOption, args);
 	}
 
@@ -378,7 +378,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftMessageCode code, EColor color, Object... args) {
+	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, EColor color, Object... args) {
 		return new MinecraftMessageEvent(player, code, color, args);
 	}
 
@@ -391,7 +391,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftMessageCode code, Object... args) {
+	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, Object... args) {
 		return new MinecraftMessageEvent(player, code, args);
 	}
 
@@ -408,7 +408,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(IMinecraftMessageCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
+	public default IMinecraftMessageEvent event(IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
 		return new MinecraftMessageEvent(code, displayOption, isItalic, isBold, color, args);
 	}
 
@@ -423,7 +423,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(IMinecraftMessageCode code, DisplayOption displayOption, EColor color, Object... args) {
+	public default IMinecraftMessageEvent event(IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
 		return new MinecraftMessageEvent(code, displayOption, color, args);
 	}
 
@@ -437,7 +437,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(IMinecraftMessageCode code, DisplayOption displayOption, Object... args) {
+	public default IMinecraftMessageEvent event(IMinecraftCode code, DisplayOption displayOption, Object... args) {
 		return new MinecraftMessageEvent(code, displayOption, args);
 	}
 
@@ -451,7 +451,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(IMinecraftMessageCode code, EColor color, Object... args) {
+	public default IMinecraftMessageEvent event(IMinecraftCode code, EColor color, Object... args) {
 		return new MinecraftMessageEvent(code, color, args);
 	}
 
@@ -464,7 +464,7 @@ public interface ICodeSender {
 	 * 
 	 * @return A message event based on the given parameter.
 	 */
-	public default IMinecraftMessageEvent event(IMinecraftMessageCode code, Object... args) {
+	public default IMinecraftMessageEvent event(IMinecraftCode code, Object... args) {
 		return new MinecraftMessageEvent(code, args);
 	}
 
