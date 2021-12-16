@@ -7,9 +7,9 @@ import java.util.function.Supplier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import fr.pederobien.commandtree.exceptions.NodeNotFoundException;
+import fr.pederobien.commandtree.exceptions.NotAvailableArgumentException;
 import fr.pederobien.commandtree.impl.Node;
-import fr.pederobien.commandtree.impl.NodeNotFoundException;
-import fr.pederobien.commandtree.impl.NotAvailableArgumentException;
 import fr.pederobien.commandtree.interfaces.INode;
 import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftNode;
 

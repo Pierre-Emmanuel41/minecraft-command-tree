@@ -10,9 +10,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.pederobien.commandtree.impl.NodeNotFoundException;
-import fr.pederobien.commandtree.impl.NotAvailableArgumentException;
-import fr.pederobien.commandtree.impl.NotAvailableCommandException;
+import fr.pederobien.commandtree.exceptions.NodeNotFoundException;
+import fr.pederobien.commandtree.exceptions.NotAvailableArgumentException;
+import fr.pederobien.commandtree.exceptions.NotAvailableCommandException;
 import fr.pederobien.commandtree.impl.RootNode;
 import fr.pederobien.commandtree.interfaces.IHelperNode;
 import fr.pederobien.commandtree.interfaces.INode;
