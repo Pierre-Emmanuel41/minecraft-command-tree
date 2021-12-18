@@ -1,312 +1,19 @@
 package fr.pederobien.minecraft.commandtree.interfaces;
 
-import org.bukkit.GameRule;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.pederobien.minecraft.dictionary.impl.MinecraftDictionaryContext;
 import fr.pederobien.minecraft.dictionary.impl.MinecraftMessageEvent;
+import fr.pederobien.minecraft.dictionary.impl.MinecraftMessageEvent.MinecraftMessageEventBuilder;
+import fr.pederobien.minecraft.dictionary.impl.PlayerGroup;
 import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftCode;
 import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftMessageEvent;
-import fr.pederobien.minecraft.managers.EColor;
-import fr.pederobien.minecraft.managers.MessageManager.DisplayOption;
-import fr.pederobien.minecraft.managers.WorldManager;
+import fr.pederobien.minecraft.dictionary.interfaces.IPlayerGroup;
 
 public interface ICodeSender {
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method is synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has
-	 * been set to false, then no message is sent.
-	 * 
-	 * @param sender        Generally a player, it is used to get a message in his language.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param isItalic      If the message should be displayed in italic.
-	 * @param isBold        If the message should be displayed in bold.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
-			Object... args) {
-		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event((Player) sender, code, displayOption, isItalic, isBold, color, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method is synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has
-	 * been set to false, then no message is sent.
-	 * 
-	 * @param sender        Generally a player, it is used to get a message in his language.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
-		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event((Player) sender, code, displayOption, color, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method is synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has
-	 * been set to false, then no message is sent.
-	 * 
-	 * @param sender        Generally a player, it is used to get a message in his language.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, Object... args) {
-		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event((Player) sender, code, displayOption, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method is synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has
-	 * been set to false, then no message is sent.
-	 * 
-	 * @param sender Generally a player, it is used to get a message in his language.
-	 * @param code   Used as key to get the right message in the right dictionary.
-	 * @param color  The message color.
-	 * @param args   Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftCode code, EColor color, Object... args) {
-		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event((Player) sender, code, color, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method is synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has
-	 * been set to false, then no message is sent.
-	 * 
-	 * @param sender Generally a player, it is used to get a message in his language.
-	 * @param code   Used as key to get the right message in the right dictionary.
-	 * @param args   Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(CommandSender sender, IMinecraftCode code, Object... args) {
-		if (sender instanceof Player && ((Player) sender).getWorld().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event((Player) sender, code, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method is
-	 * synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has been set to false, then no
-	 * message is sent. The permission associate to the given code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param isItalic      If the message should be displayed in italic.
-	 * @param isBold        If the message should be displayed in bold.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
-		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event(code, displayOption, isItalic, isBold, color, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method is
-	 * synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has been set to false, then no
-	 * message is sent. The permission associate to the given code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
-		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event(code, displayOption, color, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method is
-	 * synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has been set to false, then no
-	 * message is sent. The permission associate to the given code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(IMinecraftCode code, DisplayOption displayOption, Object... args) {
-		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event(code, displayOption, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method is
-	 * synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has been set to false, then no
-	 * message is sent. The permission associate to the given code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code  Used as key to get the right message in the right dictionary.
-	 * @param color The message color.
-	 * @param args  Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(IMinecraftCode code, EColor color, Object... args) {
-		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event(code, color, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method is
-	 * synchronized with {@link GameRule#SEND_COMMAND_FEEDBACK}. This means that if the game rule has been set to false, then no
-	 * message is sent. The permission associate to the given code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code Used as key to get the right message in the right dictionary.
-	 * @param args Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendSynchro(IMinecraftCode code, Object... args) {
-		if (WorldManager.OVERWORLD.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK))
-			send(event(code, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method send a message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false.
-	 * 
-	 * @param sender        Generally a player, it is used to get a message in his language.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param isItalic      If the message should be displayed in italic.
-	 * @param isBold        If the message should be displayed in bold.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
-			Object... args) {
-		if (sender instanceof Player)
-			send(event((Player) sender, code, displayOption, isItalic, isBold, color, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method send a message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false.
-	 * 
-	 * @param sender        Generally a player, it is used to get a message in his language.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
-		if (sender instanceof Player)
-			send(event((Player) sender, code, displayOption, color, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method send a message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false.
-	 * 
-	 * @param sender        Generally a player, it is used to get a message in his language.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, DisplayOption displayOption, Object... args) {
-		if (sender instanceof Player)
-			send(event((Player) sender, code, displayOption, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method send a message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false.
-	 * 
-	 * @param sender Generally a player, it is used to get a message in his language.
-	 * @param code   Used as key to get the right message in the right dictionary.
-	 * @param color  The message color.
-	 * @param args   Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, EColor color, Object... args) {
-		if (sender instanceof Player)
-			send(event((Player) sender, code, color, args));
-	}
-
-	/**
-	 * Send a message to the given player. First create an {@link IMinecraftMessageEvent} that is used to get messages into registered
-	 * dictionaries. This method send a message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false.
-	 * 
-	 * @param sender Generally a player, it is used to get a message in his language.
-	 * @param code   The code used to get the translation of the message in the player's language.
-	 * @param args   Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(CommandSender sender, IMinecraftCode code, Object... args) {
-		if (sender instanceof Player)
-			send(event((Player) sender, code, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method send a
-	 * message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false. The permission associate to the given
-	 * code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param isItalic      If the message should be displayed in italic.
-	 * @param isBold        If the message should be displayed in bold.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
-		send(event(code, displayOption, isItalic, isBold, color, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method send a
-	 * message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false. The permission associate to the given
-	 * code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
-		send(event(code, displayOption, color, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method send a
-	 * message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false. The permission associate to the given
-	 * code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(IMinecraftCode code, DisplayOption displayOption, Object... args) {
-		send(event(code, displayOption, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method send a
-	 * message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false. The permission associate to the given
-	 * code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code  Used as key to get the right message in the right dictionary.
-	 * @param color The message color.
-	 * @param args  Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(IMinecraftCode code, EColor color, Object... args) {
-		send(event(code, color, args));
-	}
-
-	/**
-	 * First create an {@link IMinecraftMessageEvent} that is used to get messages into registered dictionaries. This method send a
-	 * message even if the game rule {@link GameRule#SEND_COMMAND_FEEDBACK} is set to false. The permission associate to the given
-	 * code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code The code used to get the translation of the message in the player's language.
-	 * @param args Some arguments (optional) used for dynamic messages.
-	 */
-	public default void sendNotSynchro(IMinecraftCode code, Object... args) {
-		send(event(code, args));
-	}
+	public static final String DEFAULT_PREFIX = "---------------------------------------------------------\n";
+	public static final String DEFAULT_SUFFIX = "\n---------------------------------------------------------";
 
 	/**
 	 * Get a message corresponding to the given message code.
@@ -315,157 +22,93 @@ public interface ICodeSender {
 	 * @param code   The code used to get the translation of the message in the player's language.
 	 * @param args   Arguments that could be useful to send dynamic messages.
 	 * 
-	 * @return The message associated to the specified code. If the sender is not a player, then it returns an empty string.
+	 * @return The message associated to the specified code. If the sender is not a player, then it returns the english message.
 	 */
 	public default String getMessage(CommandSender sender, IMinecraftCode code, Object... args) {
-		return sender instanceof Player ? MinecraftDictionaryContext.getInstance().getMessage(event((Player) sender, code, args)) : "";
+		return MinecraftDictionaryContext.instance().getMessage(eventBuilder(sender, code, args));
 	}
 
 	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code.
+	 * Creates a new minecraft message event based on the given parameters.
 	 * 
-	 * @param player        Used to get its local.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param isItalic      If the message should be displayed in italic.
-	 * @param isBold        If the message should be displayed in bold.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 * 
-	 * @return A message event based on the given parameter.
-	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color,
-			Object... args) {
-		return new MinecraftMessageEvent(player, code, displayOption, isItalic, isBold, color, args);
-	}
-
-	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code.
-	 * 
-	 * @param player        Used to get its local.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 * 
-	 * @return A message event based on the given parameter.
-	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
-		return new MinecraftMessageEvent(player, code, displayOption, color, args);
-	}
-
-	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code.
-	 * 
-	 * @param player        Used to get its local.
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 * 
-	 * @return A message event based on the given parameter.
-	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, DisplayOption displayOption, Object... args) {
-		return new MinecraftMessageEvent(player, code, displayOption, args);
-	}
-
-	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code.
-	 * 
-	 * @param player Used to get its local.
-	 * @param code   Used as key to get the right message in the right dictionary.
-	 * @param color  The message color.
+	 * @param sender The entity that run a command.
+	 * @param code   The code used to get the right message to translate.
 	 * @param args   Some arguments (optional) used for dynamic messages.
 	 * 
-	 * @return A message event based on the given parameter.
+	 * @return A new minecraft message event.
 	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, EColor color, Object... args) {
-		return new MinecraftMessageEvent(player, code, color, args);
+	public default IMinecraftMessageEvent eventBuilder(CommandSender sender, IMinecraftCode code, Object... args) {
+		return MinecraftMessageEvent.builder(sender, code).build(args);
 	}
 
 	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code.
+	 * Creates a new instance of a minecraft message event builder based on the specific code.
 	 * 
-	 * @param player Used to get its local.
-	 * @param code   Used as key to get the right message in the right dictionary.
+	 * @param sender The entity that run a command.
+	 * @param code   The code used to get a translated message.
+	 * 
+	 * @return A new minecraft message event builder instance.
+	 */
+	public default MinecraftMessageEventBuilder eventBuilder(CommandSender sender, IMinecraftCode code) {
+		return MinecraftMessageEvent.builder(sender, code);
+	}
+
+	/**
+	 * Creates a new instance of a minecraft message event builder based on the specific code.
+	 * 
+	 * @param code The code used to get a translated message.
+	 * 
+	 * @return A new minecraft message event builder instance.
+	 */
+	public default MinecraftMessageEventBuilder eventBuilder(IMinecraftCode code) {
+		return MinecraftMessageEvent.builder(code);
+	}
+
+	/**
+	 * Creates a new minecraft message event based on the given parameters.
+	 * 
+	 * @param sender The entity that run a command.
+	 * @param code   The code used to get the right message to translate.
 	 * @param args   Some arguments (optional) used for dynamic messages.
 	 * 
-	 * @return A message event based on the given parameter.
+	 * @return A new minecraft message event.
 	 */
-	public default IMinecraftMessageEvent event(Player player, IMinecraftCode code, Object... args) {
-		return new MinecraftMessageEvent(player, code, args);
+	public default IMinecraftMessageEvent defaultEventBuilder(CommandSender sender, IMinecraftCode code, Object... args) {
+		return MinecraftMessageEvent.builder(sender, code).withPrefix(DEFAULT_PREFIX).withSuffix(DEFAULT_SUFFIX).build(args);
 	}
 
 	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code. The
-	 * permission associate to the given code should be different from {@link Permission#SENDER}.
+	 * Creates a new instance of a minecraft message event builder based on the specific code.
 	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param isItalic      If the message should be displayed in italic.
-	 * @param isBold        If the message should be displayed in bold.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
+	 * @param sender The entity that run a command.
+	 * @param code   The code used to get a translated message.
 	 * 
-	 * @return A message event based on the given parameter.
+	 * @return A new minecraft message event builder instance.
 	 */
-	public default IMinecraftMessageEvent event(IMinecraftCode code, DisplayOption displayOption, boolean isItalic, boolean isBold, EColor color, Object... args) {
-		return new MinecraftMessageEvent(code, displayOption, isItalic, isBold, color, args);
+	public default MinecraftMessageEventBuilder defaultEventBuilder(CommandSender sender, IMinecraftCode code) {
+		return MinecraftMessageEvent.builder(sender, code).withPrefix(DEFAULT_PREFIX).withSuffix(DEFAULT_SUFFIX);
 	}
 
 	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code. The
-	 * permission associate to the given code should be different from {@link Permission#SENDER}.
+	 * Creates a new instance of a minecraft message event builder based on the specific code.
 	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param color         The message color.
-	 * @param args          Some arguments (optional) used for dynamic messages.
+	 * @param code The code used to get a translated message.
 	 * 
-	 * @return A message event based on the given parameter.
+	 * @return A new minecraft message event builder instance.
 	 */
-	public default IMinecraftMessageEvent event(IMinecraftCode code, DisplayOption displayOption, EColor color, Object... args) {
-		return new MinecraftMessageEvent(code, displayOption, color, args);
+	public default MinecraftMessageEventBuilder defaultEventBuilder(IMinecraftCode code) {
+		return MinecraftMessageEvent.builder(code).withPrefix(DEFAULT_PREFIX).withSuffix(DEFAULT_SUFFIX);
 	}
 
 	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code. The
-	 * permission associate to the given code should be different from {@link Permission#SENDER}.
+	 * Creates a player group that contains only the sender cast as Player if and only if the sender is a player, or an empty group if
+	 * the sender is not a player.
 	 * 
-	 * @param code          Used as key to get the right message in the right dictionary.
-	 * @param displayOption The place where the message should be displayed on player screen.
-	 * @param args          Some arguments (optional) used for dynamic messages.
-	 * 
-	 * @return A message event based on the given parameter.
+	 * @param sender The command sender that run a command.
+	 * @return A player group.
 	 */
-	public default IMinecraftMessageEvent event(IMinecraftCode code, DisplayOption displayOption, Object... args) {
-		return new MinecraftMessageEvent(code, displayOption, args);
-	}
-
-	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code. The
-	 * permission associate to the given code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code  Used as key to get the right message in the right dictionary.
-	 * @param color The message color.
-	 * @param args  Some arguments (optional) used for dynamic messages.
-	 * 
-	 * @return A message event based on the given parameter.
-	 */
-	public default IMinecraftMessageEvent event(IMinecraftCode code, EColor color, Object... args) {
-		return new MinecraftMessageEvent(code, color, args);
-	}
-
-	/**
-	 * Create a message event. This event is used to be send to a dictionary to get the translation associated to the given code. The
-	 * permission associate to the given code should be different from {@link Permission#SENDER}.
-	 * 
-	 * @param code Used as key to get the right message in the right dictionary.
-	 * @param args Some arguments (optional) used for dynamic messages.
-	 * 
-	 * @return A message event based on the given parameter.
-	 */
-	public default IMinecraftMessageEvent event(IMinecraftCode code, Object... args) {
-		return new MinecraftMessageEvent(code, args);
+	public default IPlayerGroup toPlayerGroup(CommandSender sender) {
+		return sender instanceof Player ? PlayerGroup.of("sender", player -> player.equals((Player) sender)) : PlayerGroup.EMPTY;
 	}
 
 	/**
@@ -474,6 +117,6 @@ public interface ICodeSender {
 	 * @param event The event that contains the message to send and its modifiers (italic, bold, color).
 	 */
 	public default void send(IMinecraftMessageEvent event) {
-		MinecraftDictionaryContext.getInstance().send(event);
+		MinecraftDictionaryContext.instance().send(event);
 	}
 }
