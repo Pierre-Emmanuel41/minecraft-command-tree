@@ -2,12 +2,12 @@
 
 A minecraft command tree is a specific representation for minecraft of a more generic tree as defined in the project [command-tree](https://github.com/Pierre-Emmanuel41/command-tree.git), represented by a root and a list of children. Each children is a node which means that children can themselves have children.  
 There are two ways to create your own command tree :  
-* With the command <code>MinecraftTreeBuilder</code>
-* Inheriting the <code>MinecraftNode</code>
+* With the <code>MinecraftTreeBuilder</code>
+* Inheriting the <code>MinecraftNode</code> class.
 
-# TreeBuilder
+# MinecraftTreeBuilder
 
-The tree builder can be found is the <code>MinecraftTree</code> class. A tree is generic in order to let the developer to choose the type of the explanation. Because there are several constructors to create a minecraft root node, there are different possibility to create children.  
+The tree builder can be found in the <code>MinecraftTree</code> class. A tree is generic in order to let the developer to choose the type of the explanation. Because there are several constructors to create a minecraft root node, there are different possibility to create children.  
 
 Example : Let's say you want to create a minecraft command tree that accept the following argument:  
 person  
@@ -17,7 +17,7 @@ person
 &ensp;&ensp;birthday  
 &ensp;show  
 
-The "person" argument correspond to the root of the tree. "new", "modify" and "show" are the first children generation and are attached to the root ("person"). Whereas "name" and "birthday" are the second children generation and are attached to the "modify" child.
+The "person" argument corresponds to the root of the tree. "new", "modify" and "show" are the first children generation and are attached to the root ("person"). Whereas "name" and "birthday" are the second children generation and are attached to the "modify" child.
 
 Let's first create our own Person class :
 
@@ -256,7 +256,7 @@ name - To change the name of the person
 birthday - To change the birthday of the person
 ```
 
-# Inheriting the MinecraftCommandNode
+# Inheriting the MinecraftNode class
 
 Let's first create our own node from which each custom node will inherits:
 
@@ -264,8 +264,15 @@ Let's first create our own node from which each custom node will inherits:
 public class PersonNode extends MinecraftNode<String> {
 	private static Person person;
 
-	protected PersonNode(String label, String explanation, Supplier<Boolean> isAvailable) {
-		super(label, explanation, isAvailable);
+	/**
+	 * Create a custom node defined by a label, which correspond to its name, and an explanation.
+	 * 
+	 * @param label       The name of the node.
+	 * @param explanation The explanation of the node.
+	 * @param isAvailable True if this node is available, false otherwise.
+	 */
+	protected PersonNode(String label, String explanation, Function<Person, Boolean> isAvailable) {
+		super(label, explanation, () -> isAvailable.apply(person));
 	}
 
 	protected PersonNode(String label, String explanation) {
@@ -297,8 +304,7 @@ Let's then create the NamePersonNode and the BirthdayPersonNode classes in order
 public class NamePersonNode extends PersonNode {
 
 	protected NamePersonNode() {
-		super("name", "To change the name of the person");
-		setAvailable(() -> getPerson() != null);
+		super("name", "To change the name of the person", person -> person != null);
 	}
 
 	@Override
@@ -333,8 +339,7 @@ public class NamePersonNode extends PersonNode {
 public class BirthdayPersonNode extends PersonNode {
 
 	protected BirthdayPersonNode() {
-		super("birthday", "To change the birthday of the getPerson()");
-		setAvailable(() -> getPerson() != null);
+		super("birthday", "To change the birthday of the person", person -> person != null);
 	}
 
 	@Override
@@ -349,16 +354,19 @@ public class BirthdayPersonNode extends PersonNode {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		String birthday;
+		LocalDate birthday;
 		try {
-			birthday = args[0];
+			birthday = LocalDate.parse(args[0]);
 		} catch (IndexOutOfBoundsException e) {
 			System.out.println("The birthday is missing");
+			return false;
+		} catch (DateTimeParseException e) {
+			System.out.println("Bad format for the birthday");
 			return false;
 		}
 
 		LocalDate oldBirthday = getPerson().getBirthday();
-		getPerson().setBirthday(LocalDate.parse(birthday));
+		getPerson().setBirthday(birthday);
 		System.out.println(String.format("Changing the birthday of %s (%s -> %s)", getPerson().getName(), oldBirthday, getPerson().getBirthday()));
 		return true;
 	}
@@ -371,7 +379,7 @@ We have to create those node first because they do not depend on any other node.
 public class NewPersonNode extends PersonNode {
 
 	protected NewPersonNode() {
-		super("new", "To create a new person", () -> true);
+		super("new", "To create a new person", person -> true);
 	}
 
 	@Override
@@ -396,15 +404,18 @@ public class NewPersonNode extends PersonNode {
 			return false;
 		}
 
-		String birthday;
+		LocalDate birthday;
 		try {
-			birthday = args[1];
+			birthday = LocalDate.parse(args[1]);
 		} catch (IndexOutOfBoundsException e) {
 			System.out.println("The birthday is missing");
 			return false;
+		} catch (DateTimeParseException e) {
+			System.out.println("Bad format for the birthday");
+			return false;
 		}
 
-		setPerson(new Person(name, LocalDate.parse(birthday)));
+		setPerson(new Person(name, birthday));
 		System.out.println(String.format("New person created : name=%s, birthday=%s", getPerson().getName(), getPerson().getBirthday()));
 		return true;
 	}
@@ -415,8 +426,7 @@ public class NewPersonNode extends PersonNode {
 public class ModifyPersonNode extends PersonNode {
 
 	protected ModifyPersonNode() {
-		super("modify", "To modify the property of a person");
-		setAvailable(() -> getPerson() != null);
+		super("modify", "To modify the property of a person", person -> person != null);
 
 		add(new NamePersonNode());
 		add(new BirthdayPersonNode());
@@ -428,8 +438,7 @@ public class ModifyPersonNode extends PersonNode {
 public class ShowPersonNode extends PersonNode {
 
 	protected ShowPersonNode() {
-		super("show", "To show the properties of the getPerson()");
-		setAvailable(() -> getPerson() != null);
+		super("show", "To show the properties of the person", person -> person != null);
 	}
 
 	@Override
@@ -454,7 +463,7 @@ public class PersonCustomMinecraftTree {
 	}
 
 	/**
-	 * Dispatch the following arguments in the underlying command tree.
+	 * Dispatch the following arguments to the underlying command tree.
 	 * 
 	 * @param args The argument line to execute.
 	 * 
@@ -466,7 +475,16 @@ public class PersonCustomMinecraftTree {
 		// command line from minecraft.
 		root.onCommand(null, null, null, args);
 	}
+	
+	/**
+	 * @return The root of this minecraft tree.
+	 */
+	public IMinecraftNode<String> getRoot() {
+		return root;
+	}
 }
 ```
 
 Warning : It is VERY important to note that there is an internal cast of IMinecraftNode in the class <code>MinecraftNode</code> in order to be sure that only MinecraftNode are added to another one. Also, only a minecraft node can be set as the parent of another minecraft node.
+
+To see how to create a language sensitive command tree, please have a look to [This tutorial](https://github.com/Pierre-Emmanuel41/minecraft-command-tree/blob/master/Tutorial_language.md)
