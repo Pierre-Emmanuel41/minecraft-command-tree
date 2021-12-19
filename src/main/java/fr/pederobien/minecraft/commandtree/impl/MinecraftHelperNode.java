@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.bukkit.command.Command;
@@ -16,7 +16,7 @@ import fr.pederobien.commandtree.interfaces.INode;
 import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftHelperNode;
 
 public class MinecraftHelperNode<T> extends HelperNode<T> implements IMinecraftHelperNode<T> {
-	private BiConsumer<Player, INode<T>> displayer;
+	private BiFunction<Player, INode<T>, String> displayer;
 	private Player player;
 
 	/**
@@ -36,7 +36,7 @@ public class MinecraftHelperNode<T> extends HelperNode<T> implements IMinecraftH
 	 * @param displayer The consumer that override the default behavior when the player attempt to get an explanation of one child of
 	 *                  the given node.
 	 */
-	public MinecraftHelperNode(INode<T> node, BiConsumer<Player, INode<T>> displayer) {
+	public MinecraftHelperNode(INode<T> node, BiFunction<Player, INode<T>, String> displayer) {
 		super(node);
 		this.displayer = displayer;
 	}
@@ -83,7 +83,7 @@ public class MinecraftHelperNode<T> extends HelperNode<T> implements IMinecraftH
 		if (player == null)
 			super.displayExplanation(node);
 		else if (displayer != null)
-			displayer.accept(player, node);
+			player.sendMessage(displayer.apply(player, node));
 		else
 			player.sendMessage(node.getLabel() + " - " + node.getExplanation());
 

@@ -1,7 +1,7 @@
 package fr.pederobien.minecraft.commandtree.impl;
 
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.bukkit.command.Command;
@@ -37,7 +37,7 @@ public class MinecraftTree {
 	 * @param displayer   The consumer that override the default behavior when the player attempt to get an explanation of one child
 	 *                    of the given node.
 	 */
-	public static <T> MinecraftTreeBuilder<T> create(String label, T explanation, Supplier<Boolean> isAvailable, BiConsumer<Player, INode<T>> displayer) {
+	public static <T> MinecraftTreeBuilder<T> create(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<Player, INode<T>, String> displayer) {
 		return new MinecraftTreeBuilder<T>(label, explanation, isAvailable, displayer);
 	}
 
@@ -86,7 +86,7 @@ public class MinecraftTree {
 		 * @param displayer   The consumer that override the default behavior when the player attempt to get an explanation of one child
 		 *                    of the given node.
 		 */
-		private MinecraftTreeBuilder(String label, T explanation, Supplier<Boolean> isAvailable, BiConsumer<Player, INode<T>> displayer) {
+		private MinecraftTreeBuilder(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<Player, INode<T>, String> displayer) {
 			root = new MinecraftRootNode<T>(label, explanation, isAvailable, displayer);
 		}
 

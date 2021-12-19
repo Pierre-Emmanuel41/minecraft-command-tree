@@ -1,16 +1,13 @@
 package fr.pederobien.minecraft.commandtree.impl;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 
-import fr.pederobien.commandtree.interfaces.INode;
 import fr.pederobien.minecraft.commandtree.interfaces.ICodeSender;
 import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftCodeNode;
 import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftHelperNode;
@@ -29,20 +26,6 @@ public class MinecraftCodeTree {
 	public static MinecraftCodeTreeBuilder create(String label, IMinecraftCode explanation, Supplier<Boolean> isAvailable,
 			IMinecraftHelperNode<IMinecraftCode> helperNode) {
 		return new MinecraftCodeTreeBuilder(label, explanation, isAvailable, helperNode);
-	}
-
-	/**
-	 * Create a minecraft root node defined by a label, which correspond to its name, and an explanation.
-	 * 
-	 * @param label       The name of the node.
-	 * @param explanation The explanation of the node.
-	 * @param isAvailable True if this node is available, false otherwise.
-	 * @param displayer   The consumer that override the default behavior when the player attempt to get an explanation of one child
-	 *                    of the given node.
-	 */
-	public static <T> MinecraftCodeTreeBuilder create(String label, IMinecraftCode explanation, Supplier<Boolean> isAvailable,
-			BiConsumer<Player, INode<IMinecraftCode>> displayer) {
-		return new MinecraftCodeTreeBuilder(label, explanation, isAvailable, displayer);
 	}
 
 	/**
@@ -79,19 +62,6 @@ public class MinecraftCodeTree {
 		 */
 		private MinecraftCodeTreeBuilder(String label, IMinecraftCode explanation, Supplier<Boolean> isAvailable, IMinecraftHelperNode<IMinecraftCode> helperNode) {
 			root = new MinecraftCodeRootNode(label, explanation, isAvailable, helperNode);
-		}
-
-		/**
-		 * Create a minecraft root node defined by a label, which correspond to its name, and an explanation.
-		 * 
-		 * @param label       The name of the node.
-		 * @param explanation The explanation of the node.
-		 * @param isAvailable True if this node is available, false otherwise.
-		 * @param displayer   The consumer that override the default behavior when the player attempt to get an explanation of one child
-		 *                    of the given node.
-		 */
-		private MinecraftCodeTreeBuilder(String label, IMinecraftCode explanation, Supplier<Boolean> isAvailable, BiConsumer<Player, INode<IMinecraftCode>> displayer) {
-			root = new MinecraftCodeRootNode(label, explanation, isAvailable, displayer);
 		}
 
 		/**

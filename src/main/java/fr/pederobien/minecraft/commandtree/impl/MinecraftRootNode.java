@@ -2,7 +2,7 @@ package fr.pederobien.minecraft.commandtree.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -42,7 +42,7 @@ public class MinecraftRootNode<T> extends RootNode<T> implements IMinecraftNode<
 	 * @param displayer   The consumer that override the default behavior when the player attempt to get an explanation of one child
 	 *                    of the given node.
 	 */
-	public MinecraftRootNode(String label, T explanation, Supplier<Boolean> isAvailable, BiConsumer<Player, INode<T>> displayer) {
+	public MinecraftRootNode(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<Player, INode<T>, String> displayer) {
 		super(label, explanation, isAvailable);
 		setHelperNode(new MinecraftHelperNode<T>(this, displayer));
 	}
