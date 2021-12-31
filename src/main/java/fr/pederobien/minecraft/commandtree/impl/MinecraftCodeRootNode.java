@@ -29,7 +29,7 @@ public class MinecraftCodeRootNode extends MinecraftRootNode<IMinecraftCode> imp
 	 */
 	public MinecraftCodeRootNode(String label, IMinecraftCode explanation, Supplier<Boolean> isAvailable) {
 		super(label, explanation, isAvailable);
-		setHelperNode(new MinecraftCodeHelperNode(this));
+		setHelperNode(new MinecraftCodeHelperNode(this).getHelper());
 	}
 
 	/**

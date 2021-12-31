@@ -10,10 +10,11 @@ import fr.pederobien.minecraft.dictionary.impl.PlayerGroup;
 import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftCode;
 import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftMessageEvent;
 import fr.pederobien.minecraft.dictionary.interfaces.IPlayerGroup;
+import fr.pederobien.minecraft.managers.EColor;
 
 public interface ICodeSender {
-	public static final String DEFAULT_PREFIX = "---------------------------------------------------------\n";
-	public static final String DEFAULT_SUFFIX = "\n---------------------------------------------------------";
+	public static final String DEFAULT_PREFIX = "-----------------------------------------------------\n";
+	public static final String DEFAULT_SUFFIX = "\n-----------------------------------------------------";
 
 	/**
 	 * Get a message corresponding to the given message code.
@@ -118,5 +119,19 @@ public interface ICodeSender {
 	 */
 	public default void send(IMinecraftMessageEvent event) {
 		MinecraftDictionaryContext.instance().send(event);
+	}
+
+	/**
+	 * Send a message with a successful format. The prefix correspond to {@link #DEFAULT_PREFIX} in {@link EColor#GREEN} like the
+	 * suffix correspond to {@link #DEFAULT_SUFFIX} in {@link EColor#GREEN}. The message color is {@link EColor#GOLD}.
+	 * 
+	 * @param sender The entity that run a command.
+	 * @param code   The code used to get the right message to translate.
+	 * @param args   Some arguments (optional) used for dynamic messages.
+	 */
+	public default void sendSuccessful(CommandSender sender, IMinecraftCode code, Object... args) {
+		MinecraftMessageEventBuilder builder = eventBuilder(sender, code);
+		builder.withPrefix(DEFAULT_PREFIX, EColor.GREEN).withSuffix(DEFAULT_SUFFIX, EColor.GREEN).withColor(EColor.GOLD);
+		send(builder.build(args));
 	}
 }

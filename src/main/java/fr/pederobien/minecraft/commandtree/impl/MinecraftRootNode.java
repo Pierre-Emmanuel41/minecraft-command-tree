@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import fr.pederobien.commandtree.exceptions.NodeNotFoundException;
 import fr.pederobien.commandtree.exceptions.NotAvailableArgumentException;
@@ -42,7 +41,7 @@ public class MinecraftRootNode<T> extends RootNode<T> implements IMinecraftNode<
 	 * @param displayer   The consumer that override the default behavior when the player attempt to get an explanation of one child
 	 *                    of the given node.
 	 */
-	public MinecraftRootNode(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<Player, INode<T>, String> displayer) {
+	public MinecraftRootNode(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<CommandSender, INode<T>, String> displayer) {
 		super(label, explanation, isAvailable);
 		setHelperNode(new MinecraftHelperNode<T>(this, displayer));
 	}
@@ -74,56 +73,54 @@ public class MinecraftRootNode<T> extends RootNode<T> implements IMinecraftNode<
 		if (!isAvailable())
 			return emptyList();
 
+		String label;
 		try {
-			IMinecraftNode<T> node = getChildren().get(args[0]);
-
-			// Node not recognized, display all available children nodes, including the helper.
-			if (node == null)
-				return filter(concat(getAvailableChildren().map(e -> e.getLabel()), Stream.of(getHelper().getLabel())), args[0]);
-
-			// Node not available, display nothing.
-			if (!node.isAvailable())
-				return emptyList();
-
-			return node.onTabComplete(sender, command, alias, extract(args, 1));
+			label = args[0];
 		} catch (IndexOutOfBoundsException e) {
-			// When args is empty -> args[0] throw an IndexOutOfBoundsException
 			return emptyList();
 		}
+
+		if (label.equals(getHelper().getLabel()))
+			return getHelper().onTabComplete(sender, command, alias, extract(args, 1));
+
+		IMinecraftNode<T> node = getChildren().get(label);
+
+		// Node not recognized, display all available children nodes.
+		if (node == null)
+			return filter(concat(getAvailableChildren().map(e -> e.getLabel()), Stream.of(getHelper().getLabel())), label);
+
+		// Node not available, display nothing.
+		if (!node.isAvailable())
+			return emptyList();
+
+		return node.onTabComplete(sender, command, alias, extract(args, 1));
 	}
 
-	/**
-	 * {@inheritDoc}.
-	 * 
-	 * @throws NodeNotFoundException         If the last string contains in the <code>args</code> parameter does not refer to a node
-	 *                                       name.
-	 * @throws NotAvailableArgumentException If this node is not available.
-	 * @throws NotAvailableCommandException  If this command is not available.
-	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		String first = "";
 		if (!isAvailable())
 			throw new NotAvailableCommandException(command.getLabel());
 
+		String lab;
 		try {
-			// If the label correspond to "help" then execute its method onCommand.
-			first = args[0];
-			if (first.equals(getHelper().getLabel()))
-				return getHelper().onCommand(sender, command, label, extract(args, 1));
-
-			IMinecraftNode<T> node = getChildren().get(first);
-			if (node == null)
-				throw new NodeNotFoundException(label, first, args);
-
-			if (!node.isAvailable())
-				throw new NotAvailableArgumentException(command.getLabel(), node.getLabel());
-
-			return node.onCommand(sender, command, label, extract(args, 1));
+			lab = args[0];
 		} catch (IndexOutOfBoundsException e) {
-			// Do nothing
+			return false;
 		}
-		return true;
+
+		// If label equals "help"
+		if (lab.equals(getHelper().getLabel()))
+			return getHelper().onCommand(sender, command, label, extract(args, 1));
+
+		IMinecraftNode<T> node = getChildren().get(lab);
+
+		if (node == null)
+			throw new NodeNotFoundException(getLabel(), lab, args);
+
+		if (!node.isAvailable())
+			throw new NotAvailableArgumentException(node.getLabel(), lab);
+
+		return node.onCommand(sender, command, label, extract(args, 1));
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 
 import fr.pederobien.commandtree.interfaces.INode;
 import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftHelperNode;
@@ -37,7 +36,7 @@ public class MinecraftTree {
 	 * @param displayer   The consumer that override the default behavior when the player attempt to get an explanation of one child
 	 *                    of the given node.
 	 */
-	public static <T> MinecraftTreeBuilder<T> create(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<Player, INode<T>, String> displayer) {
+	public static <T> MinecraftTreeBuilder<T> create(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<CommandSender, INode<T>, String> displayer) {
 		return new MinecraftTreeBuilder<T>(label, explanation, isAvailable, displayer);
 	}
 
@@ -86,7 +85,7 @@ public class MinecraftTree {
 		 * @param displayer   The consumer that override the default behavior when the player attempt to get an explanation of one child
 		 *                    of the given node.
 		 */
-		private MinecraftTreeBuilder(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<Player, INode<T>, String> displayer) {
+		private MinecraftTreeBuilder(String label, T explanation, Supplier<Boolean> isAvailable, BiFunction<CommandSender, INode<T>, String> displayer) {
 			root = new MinecraftRootNode<T>(label, explanation, isAvailable, displayer);
 		}
 
