@@ -17,8 +17,9 @@ import fr.pederobien.commandtree.interfaces.IHelperNode;
 import fr.pederobien.commandtree.interfaces.INode;
 import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftHelperNode;
 import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftNode;
+import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftRootNode;
 
-public class MinecraftRootNode<T> extends RootNode<T> implements IMinecraftNode<T> {
+public class MinecraftRootNode<T> extends RootNode<T> implements IMinecraftRootNode<T> {
 
 	/**
 	 * Create a minecraft root node defined by a label, which correspond to its name, and an explanation.
@@ -66,6 +67,11 @@ public class MinecraftRootNode<T> extends RootNode<T> implements IMinecraftNode<
 	 */
 	public MinecraftRootNode(String label, T explanation) {
 		this(label, explanation, () -> false);
+	}
+
+	@Override
+	public INode<T> export() {
+		return export(() -> new MinecraftNode<T>(getLabel(), getExplanation(), () -> isAvailable()));
 	}
 
 	@Override

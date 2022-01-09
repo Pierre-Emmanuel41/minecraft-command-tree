@@ -2,11 +2,11 @@ package fr.pederobien.minecraft.commandtree.impl;
 
 import java.util.function.Supplier;
 
-import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftCodeNode;
+import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftCodeRootNode;
 import fr.pederobien.minecraft.commandtree.interfaces.IMinecraftHelperNode;
 import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftCode;
 
-public class MinecraftCodeRootNode extends MinecraftRootNode<IMinecraftCode> implements IMinecraftCodeNode {
+public class MinecraftCodeRootNode extends MinecraftRootNode<IMinecraftCode> implements IMinecraftCodeRootNode {
 
 	/**
 	 * Create a minecraft root node defined by a label, which correspond to its name, and an explanation.

@@ -1,5 +1,6 @@
 package fr.pederobien.minecraft.commandtree.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -62,18 +63,14 @@ public class MinecraftHelperNode<T> extends HelperNode<T> implements IMinecraftH
 	}
 
 	private List<String> onTabComplete(CommandSender sender, INode<T> source, String... args) {
-		String label;
-		try {
-			label = args[0];
-		} catch (IndexOutOfBoundsException e) {
-			return filter(source.getChildren().values().stream(), args).collect(Collectors.toList());
+		switch (args.length) {
+		case 1:
+			String label = args[0];
+			INode<T> node = source.getChildren().get(label);
+			return node == null ? filter(source.getChildren().values().stream(), args).collect(Collectors.toList()) : onTabComplete(sender, node, extract(args, 1));
+		default:
+			return new ArrayList<String>();
 		}
-
-		INode<T> node = source.getChildren().get(label);
-		if (node == null)
-			return filter(source.getChildren().values().stream(), args).collect(Collectors.toList());
-
-		return onTabComplete(sender, node, extract(args, 1));
 	}
 
 	private void display(CommandSender sender, INode<T> node) {
