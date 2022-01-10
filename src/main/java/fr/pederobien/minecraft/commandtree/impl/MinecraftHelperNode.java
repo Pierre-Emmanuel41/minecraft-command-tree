@@ -64,12 +64,12 @@ public class MinecraftHelperNode<T> extends HelperNode<T> implements IMinecraftH
 
 	private List<String> onTabComplete(CommandSender sender, INode<T> source, String... args) {
 		switch (args.length) {
-		case 1:
+		case 0:
+			return new ArrayList<String>();
+		default:
 			String label = args[0];
 			INode<T> node = source.getChildren().get(label);
 			return node == null ? filter(source.getChildren().values().stream(), args).collect(Collectors.toList()) : onTabComplete(sender, node, extract(args, 1));
-		default:
-			return new ArrayList<String>();
 		}
 	}
 
