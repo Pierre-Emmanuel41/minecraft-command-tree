@@ -487,4 +487,4 @@ public class PersonCustomMinecraftTree {
 
 Warning : It is VERY important to note that there is an internal cast of IMinecraftNode in the class <code>MinecraftNode</code> in order to be sure that only MinecraftNode are added to another one. Also, only a minecraft node can be set as the parent of another minecraft node.
 
-To see how to create a language sensitive command tree, please have a look to [This tutorial](https://github.com/Pierre-Emmanuel41/minecraft-command-tree/blob/master/Tutorial_language.md)
+To see how to create a language sensitive command tree, please have a look to [This tutorial](https://github.com/Pierre-Emmanuel41/minecraft-command-tree/blob/1.0_MC_1.16.5-SNAPSHOT/Tutorial_language.md)

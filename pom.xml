@@ -5,7 +5,7 @@
 	<groupId>fr.pederobien.minecraft</groupId>
 	<artifactId>command-tree</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0_MC_1.13.2-SNAPSHOT</version>
+	<version>1.0_MC_1.16.5-SNAPSHOT</version>
 	<name>command-tree</name>
 	<url>http://maven.apache.org</url>
 
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.13-R0.1-SNAPSHOT</version>
+			<version>1.16.5-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>fr.pederobien.minecraft</groupId>
 			<artifactId>dictionary</artifactId>
-			<version>3.0_MC_1.13.2-SNAPSHOT</version>
+			<version>3.0_MC_1.16.5-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

@@ -1,4 +1,4 @@
-In the previous [tutorial](https://github.com/Pierre-Emmanuel41/minecraft-command-tree/blob/master/Tutorial.md), we discovered how to create a simple minecraft command tree in order to modify the property of a person using four different commands: "./person new <name> <birthday>", "./person modify name <name>", "./person modify birthday <YYYY-MM-dd>", "./person show". But each returned message are hardcoded in English. It would be better to return a message translated in the player's language that is running the command. It is the goal of this tutorial to explain how to create a language sensitive command tree.
+In the previous [tutorial](https://github.com/Pierre-Emmanuel41/minecraft-command-tree/blob/1.0_MC_1.16.5-SNAPSHOT/Tutorial.md), we discovered how to create a simple minecraft command tree in order to modify the property of a person using four different commands: "./person new <name> <birthday>", "./person modify name <name>", "./person modify birthday <YYYY-MM-dd>", "./person show". But each returned message are hardcoded in English. It would be better to return a message translated in the player's language that is running the command. It is the goal of this tutorial to explain how to create a language sensitive command tree.
 
 In this tutorial, we will use the same model <code>Person</code> as in the previous one.
 
@@ -712,7 +712,7 @@ When running the command <code>mvn clean package install</code> it will integrat
 
 #### 4.2) Registration
 
-To register a dictionary in the minecraft dictionary context, please have a look to this [tutorial](https://github.com/Pierre-Emmanuel41/minecraft-dictionary/blob/master/Tutorial.md). Finally, to link your tree with the minecraft person command described in your plugin.yml file, just do the following in the class that extends the <code>JavaPlugin</code> class:
+To register a dictionary in the minecraft dictionary context, please have a look to this [tutorial](https://github.com/Pierre-Emmanuel41/minecraft-dictionary/blob/3.0_MC_1.16.5-SNAPSHOT/Tutorial.md). Finally, to link your tree with the minecraft person command described in your plugin.yml file, just do the following in the class that extends the <code>JavaPlugin</code> class:
 
 ```java
 @Override
