@@ -3,7 +3,6 @@ package fr.pederobien.minecraft.commandtree.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -52,10 +51,9 @@ public class MinecraftHelperNode<T> extends HelperNode<T> implements IMinecraftH
 				if (child != null)
 					child = child.getChildren().get(args[i]);
 			display(sender, child);
+			child.getChildren().values().stream().filter(node -> node.isAvailable()).forEach(node -> display(sender, node));
 		} catch (IndexOutOfBoundsException e) {
-			for (Map.Entry<String, ? extends INode<T>> entry : getSource()) {
-				display(sender, entry.getValue());
-			}
+			getSource().getChildren().values().stream().filter(node -> node.isAvailable()).forEach(node -> display(sender, node));
 		} catch (Exception e) {
 			return false;
 		}
