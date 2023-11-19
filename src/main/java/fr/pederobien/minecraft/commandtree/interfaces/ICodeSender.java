@@ -10,6 +10,7 @@ import fr.pederobien.minecraft.dictionary.impl.PlayerGroup;
 import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftCode;
 import fr.pederobien.minecraft.dictionary.interfaces.IMinecraftMessageEvent;
 import fr.pederobien.minecraft.dictionary.interfaces.IPlayerGroup;
+import fr.pederobien.minecraft.managers.BukkitManager;
 import fr.pederobien.minecraft.managers.EColor;
 
 public interface ICodeSender {
@@ -110,6 +111,15 @@ public interface ICodeSender {
 	 */
 	public default IPlayerGroup toPlayerGroup(CommandSender sender) {
 		return sender instanceof Player ? PlayerGroup.of("sender", player -> player.equals((Player) sender)) : PlayerGroup.EMPTY;
+	}
+
+	/**
+	 * Send a message in the console.
+	 * 
+	 * @param message The message to send in the console.
+	 */
+	public default void send(String message) {
+		BukkitManager.getDefaultCommandSender().sendMessage(message);
 	}
 
 	/**
